@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreGalleryRequest;
 use App\Models\Gallery;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class GalleryController extends Controller
 {
@@ -57,7 +59,6 @@ class GalleryController extends Controller
      */
     public function edit(Gallery $gallery)
     {
-        //
     }
 
     /**
@@ -65,7 +66,24 @@ class GalleryController extends Controller
      */
     public function update(Request $request, Gallery $gallery)
     {
-        //
+        $validated = $request->validate([
+            'caption' => 'required',
+            'picture' => 'image|file|max:5000',
+        ]);
+
+        if ($request->file('picture')) {
+            if ($gallery->getOriginal()['picture'] !== 'default.jpg') {
+                unlink("ceweku/" . $gallery->getOriginal()['picture']);
+            }
+            $oriName = $request->file('picture')->getClientOriginalName();
+            $validated['picture'] = md5(time()) . preg_replace('/\s+/', '', $oriName);
+            $request->picture->move(public_path('ceweku'), $validated['picture']);
+        }
+
+        Gallery::where('id', $gallery->id)->update($validated);
+        return redirect()
+            ->route('dashboard')
+            ->with('success', 'Success Edit Data');
     }
 
     /**
@@ -73,6 +91,13 @@ class GalleryController extends Controller
      */
     public function destroy(Gallery $gallery)
     {
-        //
+        if ($gallery->getOriginal()['picture'] !== 'default.jpg') {
+            unlink("ceweku/" . $gallery->getOriginal()['picture']);
+        }
+
+        Gallery::destroy($gallery->id);
+        return redirect()
+            ->route('dashboard')
+            ->with('success', 'success remove your post');
     }
 }

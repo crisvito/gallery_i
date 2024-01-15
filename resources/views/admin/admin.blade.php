@@ -28,14 +28,30 @@
                                     </p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                            <button type="button" class="btn btn-md btn-outline-primary"
+                                                data-bs-toggle="modal" data-bs-target="#view{{ $item->id }}">
+                                                View
+                                            </button>
+                                            <button type="button" class="btn btn-md btn-outline-secondary"
+                                                data-bs-toggle="modal" data-bs-target="#exampleModal{{ $item->id }}">
+                                                Edit
+                                            </button>
+                                            <form action={{ route('gallery.destroy', $item->id) }} method="POST"
+                                                class="m-0 btn-group">
+                                                @method('delete')
+                                                @csrf
+                                                <button class="btn btn-md btn-outline-danger" onclick="deleteConfirm(event)"
+                                                    type="submit">
+                                                    Hapus
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {{-- @include('pages.admin.siswa.show', ['siswa' => $item]) --}}
+                        @include('admin.modalEdit')
+                        @include('admin.modalView')
                     @endforeach
                 </div>
             </div>

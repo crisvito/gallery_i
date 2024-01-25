@@ -69,8 +69,17 @@
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
-                                    <a class="dropdown-item" href={{ route('home') }}>
-                                        Home
+                                    @role('admin')
+                                        <a class="dropdown-item" href={{ route('dashboard') }}>
+                                            Dashboard
+                                        </a>
+                                        @elserole('user')
+                                        <a class="dropdown-item" href={{ route('home') }}>
+                                            Home
+                                        </a>
+                                    @endrole
+                                    <a class="dropdown-item" href={{ route('welcome') }}>
+                                        Welcome
                                     </a>
                                 </div>
                             </li>

@@ -3,6 +3,8 @@
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\WelcomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,10 +18,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
+Route::get('/', [WelcomeController::class, 'welcome'])->name('welcome');
 
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:user'])->group(function () {
   Route::get('/home', [HomeController::class, 'index'])->name('home');
 });
 
@@ -30,7 +32,12 @@ Route::middleware(['role:admin'])->group(function () {
     ->except(['create', 'index']);
 });
 
-Route::middleware('role:operator')->get('/operator', [HomeController::class, 'operator'])->name('operator');
+Route::middleware(['role:operator'])->group(function () {
+  Route::get('/operator', [HomeController::class, 'operator'])->name('operator');
+});
 
+
+Route::post('/galleries/{gallery}/like', [LikeController::class, 'like'])->name('like');
+Route::post('/galleries/{gallery}/unlike', [LikeController::class, 'unlike'])->name('unlike');
 
 Auth::routes();

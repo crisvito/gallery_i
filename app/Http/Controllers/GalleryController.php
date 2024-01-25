@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreGalleryRequest;
 use App\Models\Gallery;
 use Illuminate\Http\Request;
-use RealRashid\SweetAlert\Facades\Alert;
-
 
 class GalleryController extends Controller
 {

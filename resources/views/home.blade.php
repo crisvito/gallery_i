@@ -13,7 +13,8 @@
                                     <p class="lead text-body-secondary">Something short and leading about the collection
                                         below—its
                                         contents, the creator, etc. Make it short and sweet, but not too short so folks
-                                        don’t simply</p>
+                                        don’t simply
+                                        skip over it entirely.</p>
                                 </div>
                             </div>
                         </section>
@@ -36,22 +37,29 @@
                                                             data-bs-target="#view{{ $item->id }}">
                                                             View
                                                         </button>
-                                                        @if (!$item->likedByUser(Auth::id()))
-                                                            <form action="{{ route('like', $item) }}" method="post" clas>
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-link ">
-                                                                    <x-bi-heart class="h-6 w-5 text-danger" />
-                                                                </button>
+                                                        <div class="d-flex align-items-center">
+                                                            <div>
+                                                                @if (!$item->likedByUser(Auth::id()))
+                                                                    <form action="{{ route('like', $item) }}"
+                                                                        method="post">
+                                                                        @csrf
+                                                                        <button type="submit" class="btn btn-link ">
+                                                                            <x-bi-heart class="h-6 text-danger" />
+                                                                        </button>
 
-                                                            </form>
-                                                        @elseif ($item->likedByUser(Auth::id()))
-                                                            <form action="{{ route('unlike', $item) }}" method="post">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-link">
-                                                                    <x-bi-heart-fill class="h-6 w-5 text-danger" />
-                                                                </button>
-                                                            </form>
-                                                        @endif
+                                                                    </form>
+                                                                @elseif ($item->likedByUser(Auth::id()))
+                                                                    <form action="{{ route('unlike', $item) }}"
+                                                                        method="post">
+                                                                        @csrf
+                                                                        <button type="submit" class="btn btn-link">
+                                                                            <x-bi-heart-fill class="h-6 text-danger" />
+                                                                        </button>
+                                                                    </form>
+                                                                @endif
+                                                            </div>
+                                                            <div class="fs-5">{{ $item->likeCount() }}</div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

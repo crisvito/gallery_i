@@ -21,4 +21,9 @@ class Gallery extends Model
     {
         return $this->likes()->where('user_id', $userId)->exists();
     }
+
+    public function likeCount()
+    {
+        return $this->likes->count();
+    }
 }

@@ -31,12 +31,42 @@
                                                     {{ Str::limit($item->caption, 50) }}
                                                 </p>
                                                 <div class="d-flex justify-content-between align-items-center">
-                                                    <div class="btn-group">
+                                                    <div class="d-flex justify-content-between w-100">
                                                         <button type="button" class="btn btn-md btn-outline-primary"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#view{{ $item->id }}">
                                                             View
                                                         </button>
+                                                        <div class="d-flex align-items-center">
+                                                            @guest
+                                                                <a href={{ route('login') }} class="btn btn-link ">
+                                                                    <x-bi-heart class="h-6 text-danger" />
+                                                                </a>
+                                                                <div class="fs-5">{{ $item->likeCount() }}</div>
+                                                            @endguest
+                                                            @auth
+                                                                <div>
+                                                                    @if (!$item->likedByUser(Auth::id()))
+                                                                        <form action="{{ route('like', $item) }}"
+                                                                            method="post">
+                                                                            @csrf
+                                                                            <button type="submit" class="btn btn-link ">
+                                                                                <x-bi-heart class="h-6 text-danger" />
+                                                                            </button>
+                                                                        </form>
+                                                                    @elseif ($item->likedByUser(Auth::id()))
+                                                                        <form action="{{ route('unlike', $item) }}"
+                                                                            method="post">
+                                                                            @csrf
+                                                                            <button type="submit" class="btn btn-link">
+                                                                                <x-bi-heart-fill class="h-6 text-danger" />
+                                                                            </button>
+                                                                        </form>
+                                                                    @endif
+                                                                </div>
+                                                                <div class="fs-5">{{ $item->likeCount() }}</div>
+                                                            @endauth
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
